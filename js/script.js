@@ -1,7 +1,14 @@
 'use strict';
 
+/** global */
 var tableSelector = document.querySelector('.table'); // globalus lenteles selektorius
 
+/**
+ * Sugeneruoja HTML lentelę į kurią vėliau generuojamos šaškės
+ * @function generate_table
+ * @param {number} size - lentelės dydis, pvz. 8x8
+ * @returns {array} lentelės duomenų masyvą
+ */
 function generate_table(size) {
 
     let alphabet = 'abcdefghijklmnopqrstuvwxyz',
@@ -16,8 +23,7 @@ function generate_table(size) {
 
           lentele.push([]);
 
-        if(i % 2) { yLyginis = false } // Jei lieka liekana tai nelyginis
-
+          if(i % 2) { yLyginis = false } // Jei lieka liekana tai nelyginis
 
       for(let a = 0; a < size; a++) { // Einame per stulpelius
          let col = document.createElement('div'),
@@ -29,7 +35,6 @@ function generate_table(size) {
 
              col.id = colID; // Priskiriame stulpeliui ID
              col.classList.add('col');
-
 
         if(a % 2) { xLyginis = false; } // Jei lieka liekana tai nelyginis
 
@@ -66,6 +71,10 @@ function generate_table(size) {
 }
 
 
+/**
+ * Valdo procesus, kurie įvyksta paspaudus ant lentelės stulpelio
+ * @function column_click
+ */
 function column_click() {
 
     let activeColumns = tableSelector.querySelectorAll('.col-active'),
@@ -96,12 +105,12 @@ function column_click() {
         })
     }
 
-
-
-
-    // alert(this.id);
 }
 
+/**
+ * Ištrina galimų ėjimų atvaizdavimą iš HTML lentelės
+ * @function remove_possible_moves
+ */
 function remove_possible_moves() {
     let possible = tableSelector.querySelectorAll('.col-possible');
     possible.forEach(function(el) {
@@ -109,10 +118,20 @@ function remove_possible_moves() {
     });
 }
 
+/**
+ * Suranda pažymėtą šaškę HTML lentelėje
+ * @function find_active_checker
+ * @returns {object} Gražina aktyvios šaškes DOM objektą
+ */
 function find_active_checker() {
     return tableSelector.querySelector('.col-active');
 }
 
+/**
+ * Perstumia šaškę į naują poziciją
+ * @function move_checker
+ * @param {object} col - stulpelio objektas į kurį perkelsime šaškę
+ */
 function move_checker(col) {
 
     let activeChecker = find_active_checker(),
@@ -141,29 +160,8 @@ function move_checker(col) {
 
 }
 
-// function calc_scope(checkerX, checkerY, checkerColor, checkerType) {
-//
-//     for(let y = checkerY - 1; y < checkerY + 2; y++) {
-//         for(let x = checkerX - 1; x < checkerX + 2; x++) {
-//
-//             let col = find_col_by_coordinates(x, y),
-//                 isChecker = find_checker_by_coordinates(x, y);
-//                 // console.log(isChecker);
-//
-//             if( col !== null && // langelis egzistuoja
-//                 col.type !== 'white') { // langelis nera baltas
-//                     calc_scope(isChecker.x, isChecker.y, isChecker.color, isChecker.type);
-//                 }
-//
-//
-//         }
-//     }
-//
-//     return cross;
-// }
-
 /**
- * Paskaičiuoja pagal duotos šaškes koordinates, spalvą ir tipą galimus ėjimus
+ * Paskaičiuoja galimus šaškės ejimus pagal duotos šaškes koordinates, spalvą ir tipą
  * @function calc_scope
  * @param {number} checkerX - šaškės x koordinatė
  * @param {number} checkerY - šaškės y koordinatė
@@ -219,10 +217,21 @@ function calculate_scope(checkerX, checkerY, checkerColor, checkerType) {
     // return cross;
 }
 
+/**
+ * Suranda pažymėta šaške HTML lentelėje
+ * @function show_possible_move
+ * @param {object} column - stulpelio objektas
+ */
 function show_possible_move (column) {
     tableSelector.querySelector('#' + column.id).classList.add('col-possible');
 }
 
+/**
+ * Suranda stulpelį iš stulpelio masyvo pagal jo ID
+ * @function find_col_by_id
+ * @param {string} id - stulpelio ID
+ * @returns {object} Gražina stulpelio duomenis
+ */
 function find_col_by_id(id) {
     let col = null;
 
@@ -237,6 +246,13 @@ function find_col_by_id(id) {
     return col;
 }
 
+/**
+ * Suranda stulpelį iš stulpelio masyvo pagal jo x ir y koordinates
+ * @function find_col_by_coordinates
+ * @param {number} x
+ * @param {number} y
+ * @returns {object} Gražina stulpelio duomenis
+ */
 function find_col_by_coordinates(x, y) {
     let col = null;
 
@@ -252,6 +268,13 @@ function find_col_by_coordinates(x, y) {
 
 }
 
+/**
+ * Suranda šaškę iš šaškių masyvo pagal šaškės koordinates
+ * @function find_checker_by_coordinates
+ * @param {number} x
+ * @param {number} y
+ * @returns {object} Gražina šaškės duomenis
+ */
 function find_checker_by_coordinates(x, y) {
     let checker = null;
 
@@ -264,6 +287,13 @@ function find_checker_by_coordinates(x, y) {
     return checker;
 }
 
+
+/**
+ * Suranda šaškę iš šaškių masyvo pagal jos ID
+ * @function find_checker_by_id
+ * @param {string} id
+ * @returns {object} Gražina šaškės duomenis
+ */
 function find_checker_by_id(id) {
     let checker = null;
 
@@ -276,6 +306,13 @@ function find_checker_by_id(id) {
     return checker;
 }
 
+/**
+ * Suranda šaškę iš šaškių masyvo pagal jos ID
+ * @function generate_checkers
+ * @param {string} table - lentelės masyvas
+ * @param {string} size - kiek šaškių atspausdinti, pvz. 12 reiškia, jog bus atspausdinta 12 baltų ir juodų
+ * @returns {array} Šaškių masyvas
+ */
 function generate_checkers(table, size) {
     let black_checkers = [], // tik tam, jog zinoti kiek juodu šaškių sukurta
         white_checkers = [], // tik tam, jog zinoti kiek baltų šaškių sukurta
@@ -310,6 +347,15 @@ function generate_checkers(table, size) {
     return checkers;
 }
 
+/**
+ * Sukuria šaškę lentelėje pagal duota langelio ID ir gražiną šaškės objektą
+ * @function create_checker
+ * @param {string} id
+ * @param {string} color - spalva white|black
+ * @param {number} x
+ * @param {number} y
+ * @returns {object}
+ */
 function create_checker(id, color, x, y) {
 
     let checker = document.createElement('img'),
@@ -334,6 +380,13 @@ var table = generate_table(8),
     checkers = generate_checkers(table, 12),
     possible = [];
 
+// Pavyzdys, start_program funkcijos
+// start_program({
+//     table: 8,
+//     checkers: 12,
+//     history: true,
+//     time: true
+// });
 
 
 // console.log(checkers);
