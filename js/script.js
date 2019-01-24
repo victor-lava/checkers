@@ -160,6 +160,50 @@ function move_checker(col) {
 
 }
 
+
+function calc_scope(checkerX, checkerY, checkerColor, checkerType) {
+
+    for(let y = checkerY - 1; y < checkerY + 2; y++) {
+        for(let x = checkerX - 1; x < checkerX + 2; x++) {
+
+            let col = find_col_by_coordinates(x, y),
+                isChecker = find_checker_by_coordinates(x, y);
+                // console.log(isChecker);
+                // console.log(isChecker.color);
+                // console.log(checkerColor);
+                if( col !== null && // langelis egzistuoja ir nėra baltas
+                    col.type !== 'white') {
+
+                        possible.push(col);
+
+                        console.log(col); // TODO: jei šaškė neegzistuoja ir langelis laisvas irgi reikia tikrinti ir dėti į galimus possibility
+                        if(isChecker !== null && // šaškė egzistuoja
+                           isChecker.color !== checkerColor) { // šaškės spalva ne tokia pati
+                               // possible.push(isChecker);
+                               calc_scope(isChecker.x,
+                                          isChecker.y,
+                                          isChecker.color,
+                                          isChecker.type);
+                        }
+                        else {
+                            return false;
+                        }
+                        // calc_scope( isChecker.x,
+                        //             isChecker.y,
+                        //             isChecker.color,
+                        //             isChecker.type);
+
+                }
+
+            }
+
+    }
+
+
+    }
+
+
+
 /**
  * Paskaičiuoja galimus šaškės ejimus pagal duotos šaškes koordinates, spalvą ir tipą
  * @function calc_scope
